@@ -5,12 +5,16 @@
         die('nessun id');
     }
 
-    $id = $_POST['id'];
+    $sql = "DELETE FROM stanze WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i",$id);
 
-    $sql = "DELETE FROM stanze WHERE id = $id";
-    $result = $conn->query($sql);
-    if($result){
-        echo "ok";
+    $id = $_POST['id'];
+    $stmt->execute();
+
+    var_dump($stmt);
+    if($stmt && $stmt->affected_rows >0){
+        header("Location: $basepatch/index.php?roomId=$id");
     } else {
         echo "non ho cancellato";
     }
